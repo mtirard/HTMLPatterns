@@ -883,9 +883,13 @@ cssHasConstraint[rel[link_, c_cx], _] := cssBelow[cssLinked[ReplacePart[cssRuns[
 (* A compound's tests, which see its element, as a PatternTest, and the
    constraints of its :has() on its XMLPatterns. Tests on its path, from a
    complex :not() or :is(), wrap it in cssPathed for cssPathRoot. *)
+(* The Slot is put into a held body that Function @@ wraps. *)
+(* :!CodeAnalysis::BeginBlock:: *)
+(* :!CodeAnalysis::Disable::UnscopedObjectError:: *)
 cssTested[p_, ts_] :=
   With[{q = Fold[cssConstrained, p, Cases[ts, hasC[c_] :> c]], hs = DeleteCases[ts, _hasC | _pathT], ps = Cases[ts, _pathT]},
     cssPathedBy[If[hs === {}, q, cssPatternTest[q, Function @@ (cssAnd[hs] /. cssSelf -> Slot[1])]], ps]];
+(* :!CodeAnalysis::EndBlock:: *)
 
 cssPathedBy[q_, {}] := q;
 cssPathedBy[q_, ps_] := cssPathed[q, DeleteDuplicates[ps[[All, 1]]], ps[[1, 2]]];
@@ -978,7 +982,10 @@ cssNamed[p_, None] := p;
 cssNamed[p_, s_] := Pattern @@ {s, p};
 
 cssPathTested[p_, {}] := Descendant[p];
+(* :!CodeAnalysis::BeginBlock:: *)
+(* :!CodeAnalysis::Disable::UnscopedObjectError:: *)
 cssPathTested[p_, ts_] := cssPatternTest[Descendant[p], Function @@ (cssAnd[ts] /. cssSelf -> Slot[1])];
+(* :!CodeAnalysis::EndBlock:: *)
 
 (* A test on a path left anywhere else, as inside :has(), is not translated. *)
 cssPathFree[p_] :=
@@ -1149,7 +1156,11 @@ cssTagPattern[tg[All, xs_]] := cssPatternTest[_, Function @@ cssAnd[cssNotTag /@
 cssTagPattern[tg[allowed_, xs_]] :=
   Replace[Select[allowed, !MemberQ[xs, #] &], {{} -> cssNever, {t_} :> t, ts_ :> Alternatives @@ ts}];
 
+(* A held test on #, which Function @@ wraps. *)
+(* :!CodeAnalysis::BeginBlock:: *)
+(* :!CodeAnalysis::Disable::UnscopedObjectError:: *)
 cssNotTag[x_] := Hold[# =!= x];
+(* :!CodeAnalysis::EndBlock:: *)
 
 (* PatternTest holds its test, which is built here. *)
 cssPatternTest[p_, f_] := PatternTest[p, f];
@@ -1192,6 +1203,9 @@ cssRawValue[cs_] :=
       Length[c] == 1, cssSingle[First[c]],
       True, cssPatternTest[_, Function @@ cssAnd[cssSlot /@ c]]]];
 
+(* The held tests on # are joined and wrapped by Function @@. *)
+(* :!CodeAnalysis::BeginBlock:: *)
+(* :!CodeAnalysis::Disable::UnscopedObjectError:: *)
 cssListValue[cs_] :=
   With[{h = DeleteDuplicates[Cases[cs, has[v_] :> v]], l = DeleteDuplicates[Cases[cs, lacks[v_] :> v]],
       hi = DeleteDuplicates[Cases[cs, hasI[v_] :> v]]},
@@ -1203,6 +1217,7 @@ cssListValue[cs_] :=
         If[h === {}, {}, {Hold[ContainsAll[#, h]]}],
         If[l === {}, {}, {Hold[ContainsNone[#, l]]}],
         cssSlot[hasI[#]] & /@ hi]]]]];
+(* :!CodeAnalysis::EndBlock:: *)
 
 (* A constraint alone, as the value pattern. *)
 cssSingle[eq[v_]] := v;
@@ -1216,6 +1231,8 @@ cssSingle[c_] := cssPatternTest[_, Function @@ cssSlot[c]];
 (* A constraint as a held test on #, to be joined with others. The i flag
    folds A-Z only, on both sides, as Selectors requires: IgnoreCase would
    also fold letters such as \[CapitalEAcute]. *)
+(* :!CodeAnalysis::BeginBlock:: *)
+(* :!CodeAnalysis::Disable::UnscopedObjectError:: *)
 cssSlot[eq[v_]] := Hold[# === v];
 cssSlot[eqI[v_]] := With[{f = $cssFold}, Hold[f[#] === v]];
 cssSlot[dash[v_]] := With[{w = v <> "-"}, Hold[# === v || StringStartsQ[#, w]]];
@@ -1228,3 +1245,4 @@ cssSlot[sub[v_]] := Hold[StringContainsQ[#, v]];
 cssSlot[subI[v_]] := With[{f = $cssFold}, Hold[StringContainsQ[f[#], v]]];
 cssSlot[checkedType] := Hold[StringMatchQ[#, "checkbox" | "radio", IgnoreCase -> True]];
 cssSlot[hasI[v_]] := With[{f = $cssFold}, Hold[MemberQ[f[#], v]]];
+(* :!CodeAnalysis::EndBlock:: *)

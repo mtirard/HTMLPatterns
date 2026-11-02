@@ -14,20 +14,16 @@
 	the repo root, and Get-loads the context before the tests run.
 *)
 
-BeginPackage["UnitTestFramework`"]
-
-$TestConfig
-
-Begin["`Private`"]
-
-$TestConfig = <|
+(* The file evaluates to the config association, which the runner takes as
+   the config when the file defines no $TestConfig. *)
+<|
 	(* --- Paclet resolution --- *)
 	(* First context is the paclet itself (Get-loaded by PacletInitialization);
-	   HTMLPatternsTests` holds the shared fixtures from Support/Fixtures.wl.
+	   MaximilienTirard`HTMLPatternsTests` holds the shared fixtures from Support/Fixtures.wl.
 	   Both are placed on $ContextPath while the tests evaluate, so tests can call
 	   the public symbols (XMLCases, XMLPattern, ...) and reference the fixtures
 	   ($tree, $treeSiblings, ...) unqualified. *)
-	"PacletContexts" -> {"MaximilienTirard`HTMLPatterns`", "HTMLPatternsTests`"},
+	"PacletContexts" -> {"MaximilienTirard`HTMLPatterns`", "MaximilienTirard`HTMLPatternsTests`"},
 	"PacletDirectory" -> Automatic,
 
 	(* Load the paclet, then the shared fixtures used across several test files,
@@ -53,10 +49,4 @@ $TestConfig = <|
 	"TestCategorizationFunction" -> Automatic,
 	"TestReportOptions" -> {},
 	"TestFileContext" -> Automatic
-|>;
-
-End[]
-
-EndPackage[]
-
-$TestConfig
+|>

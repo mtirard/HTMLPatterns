@@ -10,10 +10,10 @@
 	have children of their own, so a tree stays at a few hundred elements.
 
 	Loaded by Tests/TestConfig.m's "PacletInitialization", on the
-	HTMLPatternsTests` context.
+	MaximilienTirard`HTMLPatternsTests` context.
 *)
 
-BeginPackage["HTMLPatternsTests`"];
+BeginPackage["MaximilienTirard`HTMLPatternsTests`"];
 
 randomTree::usage = "randomTree[seed] is a random XMLElement tree, the same for the same seed.";
 randomTrees::usage = "randomTrees[seed, n] is a list of n random trees, the same for the same seed.";

@@ -8,10 +8,10 @@
 	the expression, and the oracle gives the elements it selects by those
 	positions. XPathOracle.java beside this file runs the queries.
 
-	Loaded by the test files that use it, on the HTMLPatternsTests` context.
+	Loaded by the test files that use it, on the MaximilienTirard`HTMLPatternsTests` context.
 *)
 
-BeginPackage["HTMLPatternsTests`"];
+BeginPackage["MaximilienTirard`HTMLPatternsTests`"];
 
 xpathElements::usage = "xpathElements[tree, queries] gives an Association from each XPath query to the elements of tree it selects, in document order, or $Failed if the JDK did not run.";
 oracleTrees::usage = "oracleTrees[seed, n] is a list of n random documents, the same for the same seed, over the tags the oracle queries name.";

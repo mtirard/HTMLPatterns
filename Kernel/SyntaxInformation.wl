@@ -15,6 +15,10 @@
 (* does not do for Cases.                                       *)
 (* =========================================================== *)
 
+(* _. here marks an optional argument of an ArgumentsPattern, not a pattern
+   that could take an option. *)
+(* :!CodeAnalysis::BeginBlock:: *)
+(* :!CodeAnalysis::Disable::OptionsPattern:: *)
 Scan[
   Apply[Function[{f, args},
     SyntaxInformation[f] = Join[{"ArgumentsPattern" -> args},
@@ -25,6 +29,7 @@ Scan[
     HTMLInnerText -> {_, OptionsPattern[]}, HTMLTextContent -> {_},
     HTMLToNotebook -> {_, OptionsPattern[]}, HTMLClassList -> {_}, FromCSSSelector -> {_},
     XMLPattern -> {_, _.}, Descendant -> {_, _.}, Child -> {_}}];
+(* :!CodeAnalysis::EndBlock:: *)
 
 (* HTMLToTree takes Tree's options as well as its own, as TreeForm takes a
    depth. *)

@@ -2,6 +2,8 @@
 
 Pattern-based HTML element selection and text extraction for the Wolfram Language.
 
+<img src="docs/images/html-tree.png" alt="HTMLToTree drawing of an article with a heading, a paragraph containing a link, and a menu of three links" width="360">
+
 HTMLPatterns works on the `XMLObject` tree that `Import[…, {"HTML", "XMLObject"}]` gives. It adds:
 
 - **XML patterns**: `XMLPattern[tag, attrs][constraints…]`, nested as the document is, with constraints on an element's children (`Child`) and on what is below it (`Descendant`), and CSS selector strings through `FromCSSSelector`

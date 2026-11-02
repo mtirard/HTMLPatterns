@@ -8,11 +8,11 @@
 	inline in that file, next to the tests that exercise them.
 
 	Loaded by Tests/TestConfig.m's "PacletInitialization". The symbols are exported
-	on the HTMLPatternsTests` context, which TestConfig.m adds to
+	on the MaximilienTirard`HTMLPatternsTests` context, which TestConfig.m adds to
 	"PacletContexts" so tests can reference them unqualified.
 *)
 
-BeginPackage["HTMLPatternsTests`"];
+BeginPackage["MaximilienTirard`HTMLPatternsTests`"];
 
 $tree::usage = "$tree is an imported HTML document with a .main div (two <p>, a <span>) and a .sidebar div.";
 $treeProducts::usage = "$treeProducts is an imported HTML product listing with data-price attributes and <a> children, for named-attribute extraction tests.";
