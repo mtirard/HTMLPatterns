@@ -34,10 +34,16 @@ HTMLInnerText[XMLFirstCase[html, "ul.menu"]]
 
 ## Installing
 
-Requires Wolfram Language 15.0 or later. Install the latest release from [GitHub](https://github.com/mtirard/HTMLPatterns/releases):
+Requires Wolfram Language 15.0 or later. Install from the [Wolfram Paclet Repository](https://resources.wolframcloud.com/PacletRepository/resources/MaximilienTirard/HTMLPatterns/):
 
 ```wl
-PacletInstall["https://github.com/mtirard/HTMLPatterns/releases/download/v4.0.0/MaximilienTirard__HTMLPatterns-4.0.0.paclet"]
+PacletInstall["MaximilienTirard/HTMLPatterns"]
+```
+
+Releases are also on [GitHub](https://github.com/mtirard/HTMLPatterns/releases):
+
+```wl
+PacletInstall["https://github.com/mtirard/HTMLPatterns/releases/download/v1.0.0/MaximilienTirard__HTMLPatterns-1.0.0.paclet"]
 ```
 
 To build from source, which needs `wolframscript`, clone the repository and run:
