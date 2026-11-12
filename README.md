@@ -43,7 +43,7 @@ PacletInstall["MaximilienTirard/HTMLPatterns"]
 Releases are also on [GitHub](https://github.com/mtirard/HTMLPatterns/releases):
 
 ```wl
-PacletInstall["https://github.com/mtirard/HTMLPatterns/releases/download/v1.0.0/MaximilienTirard__HTMLPatterns-1.0.0.paclet"]
+PacletInstall["https://github.com/mtirard/HTMLPatterns/releases/download/v1.0.1/MaximilienTirard__HTMLPatterns-1.0.1.paclet"]
 ```
 
 To build from source, which needs `wolframscript`, clone the repository and run:

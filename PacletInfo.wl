@@ -3,7 +3,7 @@ PacletObject[
     "Name" -> "MaximilienTirard/HTMLPatterns",
     "Description" -> "Select elements in HTML with Wolfram Language patterns and CSS selectors, extract their text, and convert pages to notebooks",
     "Creator" -> "Maximilien Tirard",
-    "Version" -> "1.0.0",
+    "Version" -> "1.0.1",
     "WolframVersion" -> "15.0+",
     "PublisherID" -> "MaximilienTirard",
     "License" -> "MIT",
