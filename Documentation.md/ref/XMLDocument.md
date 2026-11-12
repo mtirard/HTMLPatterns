@@ -13,7 +13,7 @@ Each ``c$i`` is a constraint, a condition on what is below the document, as in `
 
 The position of the document is ``{}``. A name for the whole ``XMLDocument`` pattern gives the tree for an ``XMLObject`` or a list, and ``{e$}`` for a bare element ``e$``.
 
-``XMLMatchQ[tree$, XMLDocument[$$]]`` can give ``True`` only for an ``XMLObject``.
+``XMLMatchQ[tree$, XMLDocument[$$]]`` tests the document of ``tree$``, an ``XMLObject``, a list or a bare element, as ``XMLCases`` finds it.
 
 ``XMLDocument[]`` with no constraints matches any document.
 
@@ -148,24 +148,6 @@ Out[1]= True
 ```
 
 ### Possible Issues
-
----
-
-``XMLMatchQ`` gives ``False`` for an element tested against an ``XMLDocument`` pattern:
-
-```wl
-In[1]:= XMLMatchQ[XMLElement["p", {}, {"Text"}], XMLDocument[{XMLPattern["p"]}]]
-
-Out[1]= False
-```
-
-Test a list of elements against a list pattern instead:
-
-```wl
-In[2]:= XMLMatchQ[{XMLElement["p", {}, {"Text"}]}, {XMLPattern["p"]}]
-
-Out[2]= True
-```
 
 ---
 

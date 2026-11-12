@@ -19,14 +19,28 @@ TestCreate[
 
 (* === Refusals === *)
 
-(* XMLMatchQ tests an element as the pattern root, and an element is not the
-   document. *)
+(* A Roles rule is applied to elements, and the document is not one. *)
 TestCreate[
-  {XMLMatchQ[XMLElement["p", {}, {}], XMLDocument[]],
-   HTMLInnerText[$doc, "Roles" -> {XMLDocument[] -> "Skip"}]},
-  {False, $Failed},
+  HTMLInnerText[$doc, "Roles" -> {XMLDocument[] -> "Skip"}],
+  $Failed,
   {HTMLInnerText::badpat},
   TestID -> "document-refused-one-element"
+];
+
+(* === The tests agree with XMLCases (#74) === *)
+
+(* An input of each kind has a document, so XMLFreeQ and XMLMatchQ find an
+   XMLDocument pattern exactly where XMLCases does. *)
+TestCreate[
+  With[{inputs = {$doc, $bare, {" ", $bare}, {$bare, XMLElement["p", {}, {}]}, {}, {"text"}},
+      patterns = {XMLDocument[], XMLDocument[{XMLPattern["body"]}], XMLDocument[{XMLPattern["html"]}],
+        XMLDocument[{___, XMLPattern["p"]}], XMLDocument[Child[XMLPattern["body"]]],
+        XMLDocument[Descendant[XMLPattern["p", "id" -> "y"]]]}},
+    Union @ Flatten @ Outer[
+      {XMLFreeQ[#1, #2] === (XMLCases[#1, #2 :> 1] === {}), XMLMatchQ[#1, #2] === (XMLCases[#1, #2 :> 1] =!= {})} &,
+      inputs, patterns, 1]],
+  {True},
+  TestID -> "document-tests-agree-with-xmlcases"
 ];
 
 (* === XMLDeleteCases === *)

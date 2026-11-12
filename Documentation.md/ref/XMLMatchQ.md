@@ -1,7 +1,7 @@
 # XMLMatchQ
 
    ``XMLMatchQ[element$, pattern$]`` gives ``True`` if ``element$`` itself, not an element inside it, matches ``pattern$``, and ``False`` otherwise.
-   ``XMLMatchQ[document$, XMLDocument[$$]]`` tests an ``XMLObject`` document.
+   ``XMLMatchQ[tree$, XMLDocument[$$]]`` tests the document above the top-level elements of ``tree$``, which can be an ``XMLObject`` document, a list or a bare ``XMLElement``.
    ``XMLMatchQ[{e$1, e$2, $$}, listpattern$]`` tests a list of elements against a list pattern, leaving strings out.
    ``XMLMatchQ[pattern$]`` represents an operator form of ``XMLMatchQ`` that can be applied to an element.
 
@@ -16,7 +16,7 @@
 | ``XMLPattern[$$]`` | an element pattern, which can have constraints on the elements below it |
 | ``XMLElement[$$]`` | an element pattern matched exactly as written, text included |
 | ``"selector$"`` | a CSS selector for one element, one that depends only on its element and what is below it, such as ``"a.external"`` |
-| ``XMLDocument[$$]`` | a pattern for a document, which tests an ``XMLObject`` |
+| ``XMLDocument[$$]`` | a pattern for the document above the top-level elements of an ``XMLObject``, a list or a bare element |
 | ``{p$1, p$2, $$}`` | a list pattern, which tests a list of elements, with strings left out |
 | ``Alternatives[p$1, p$2]`` | any of the patterns |
 
@@ -345,12 +345,12 @@ Out[1]= $Failed
 
 ---
 
-An element tested against an ``XMLDocument`` pattern gives ``False``:
+An ``XMLDocument`` pattern tests the document above an element, which has the element as its child:
 
 ```wl
-In[1]:= XMLMatchQ[XMLElement["html", {}, {}], XMLDocument[{XMLPattern["html"]}]]
+In[1]:= XMLMatchQ[XMLElement["html", {}, {}], #] & /@ {XMLDocument[Child[XMLPattern["html"]]], XMLPattern["html"][Child[XMLPattern["html"]]]}
 
-Out[1]= False
+Out[1]= {True, False}
 ```
 
 ---

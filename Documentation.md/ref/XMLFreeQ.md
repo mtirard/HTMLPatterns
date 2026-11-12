@@ -18,11 +18,11 @@ In ``levelspec$``, ``tree$`` is at depth 0 and its children at depth 1. ``levels
 | ``Infinity`` | depths 1 and below |
 | ``{0, Infinity}`` | ``tree$`` itself and all depths below it, the default |
 
-For a list, the elements of the list are at depth 1. For an ``XMLObject``, the document is at depth 0 and its root element at depth 1.
+For a list, the elements of the list are at depth 1. For an ``XMLObject``, its root element is at depth 1. For every ``tree$``, the document above its top-level elements is at depth 0.
 
 ``tree$`` can be an ``XMLObject``, an ``XMLElement``, or a list of elements and strings.
 
-``pattern$`` can be an ``XMLPattern``, an ``XMLElement`` pattern, an ``XMLDocument`` pattern, which matches only a document at depth 0, a CSS selector for one element, such as ``"a.ext"``, or alternatives of these. Each can be named, have a condition or have a test.
+``pattern$`` can be an ``XMLPattern``, an ``XMLElement`` pattern, an ``XMLDocument`` pattern, which matches only the document at depth 0, a CSS selector for one element, such as ``"a.ext"``, or alternatives of these. Each can be named, have a condition or have a test.
 
 ``XMLFreeQ`` issues a message and returns ``$Failed`` when ``tree$`` has none of the forms above, or when ``pattern$`` is a malformed ``XMLPattern``, a rule, or a CSS selector that depends on what is above or beside its element, such as ``"nav a"``.
 

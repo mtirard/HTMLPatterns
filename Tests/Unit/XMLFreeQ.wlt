@@ -33,10 +33,20 @@ TestCreate[
    pattern matches the document. *)
 TestCreate[
   {XMLFreeQ[nav, XMLPattern["nav"], {1}], XMLFreeQ[nav, XMLPattern["nav"], {0}],
-    XMLFreeQ[nav, XMLDocument[{XMLPattern["nav"]}]], XMLFreeQ[nav, XMLDocument[], {1, Infinity}],
-    XMLFreeQ[nav[[2]], XMLDocument[]]},
-  {False, True, False, True, True},
+    XMLFreeQ[nav, XMLDocument[{XMLPattern["nav"]}]], XMLFreeQ[nav, XMLDocument[], {1, Infinity}]},
+  {False, True, False, True},
   TestID -> "xmlfreeq-document"
+];
+
+(* A list and a bare element have a document above their top elements too
+   (ADR 0018), at depth 0, as XMLCases finds it (#74). *)
+TestCreate[
+  {XMLFreeQ[{" ", nav[[2]]}, XMLDocument[{XMLPattern["nav"]}]], XMLFreeQ[{" ", nav[[2]]}, XMLDocument[{XMLPattern["a"]}]],
+    XMLFreeQ[nav[[2]], XMLDocument[{XMLPattern["nav"]}]], XMLFreeQ[nav[[2]], XMLDocument[Child[XMLPattern["a"]]]],
+    XMLFreeQ[{nav[[2]]}, XMLDocument[]], XMLFreeQ[nav[[2]], XMLDocument[]],
+    XMLFreeQ[{nav[[2]]}, XMLDocument[], {1, Infinity}], XMLFreeQ[nav[[2]], XMLDocument[], {1, Infinity}]},
+  {False, True, False, True, False, False, True, True},
+  TestID -> "xmlfreeq-document-above-list-and-element"
 ];
 
 (* A list is not an element: its elements are at depth 1, and strings are
@@ -66,12 +76,13 @@ TestCreate[
   TestID -> "xmlfreeq-operator-form"
 ];
 
-(* In the operator form too, an element or a list is free of an XMLDocument
-   pattern, and a list itself is not tested. *)
+(* In the operator form too, an element, a list and a document each have a
+   document above their top elements, and a list itself is not tested as an
+   element. *)
 TestCreate[
   {XMLFreeQ[XMLDocument[]] /@ {nav[[2]], {nav[[2]]}, nav},
     XMLFreeQ[XMLPattern["nav", "id" -> "i"]] /@ {nav, {" ", nav[[2]]}, {" "}}},
-  {{True, True, False}, {False, False, True}},
+  {{False, False, False}, {False, False, True}},
   TestID -> "xmlfreeq-operator-form-kinds"
 ];
 

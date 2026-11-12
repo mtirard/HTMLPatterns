@@ -193,13 +193,13 @@ bareQ[_, _] := False;
 (* The node of tree the run is rooted at: the element, 1, or the document or
    the virtual document above a list's elements, 0; None, for "Input", when
    the pattern cannot take the input. For All and {lo, hi} a tree that is
-   not one is refused. Only a list pattern takes a list, and it takes
-   nothing else. *)
+   not one is refused. A list pattern takes a list and nothing else. *)
 topNode[cq_, x_, "Input"] :=
   Which[
     cq["Lists"], If[ListQ[x] && validTreeQ[x], 0, None],
     MatchQ[x, _XMLElement], 1,
     MatchQ[x, XMLObject["Document"][_, _XMLElement, _]], 0,
+    ListQ[x] && validTreeQ[x], 0,
     True, None];
 topNode[cq_, x_, _] :=
   If[validTreeQ[x], If[MatchQ[x, _XMLElement], 1, 0], messageTreeRefusal[cq["Head"], x]; Throw[$Failed, $refusal]];
@@ -213,14 +213,18 @@ indexDepth["Input", top_, reach_] := top + reach;
 indexDepth[{_, hi_}, top_, reach_] := top + hi + reach;
 
 (* The nodes tried as the pattern root (rootCandidates), in document order,
-   or All for every candidate. A node of a depth range is tried only if the
-   root can match it (candidateVector); the input is at depth 0, but a list
-   is not a node: its elements are at depth 1. *)
+   or All for every candidate. For "Input", the input and the document above
+   its top elements, node 0, which is the input itself unless it is a bare
+   element. A node of a depth range is tried only if the
+   root can match it (candidateVector). The input is at depth 0: a document
+   or a bare element, and a list's elements are at depth 1. The document
+   above the top elements, node 0, is tried at depth 0 for every input, a
+   list's and a bare element's included (ADR 0018), as XMLCases finds it. *)
 rootNodes[_, All, _, _] := All;
-rootNodes[_, "Input", top_, _] := {top};
-rootNodes[root_, {lo_, hi_}, top_, x_] :=
-  Select[Range[If[ListQ[x], 1, top], $end[[top + 1]]],
-    lo <= $depth[[# + 1]] - top <= hi && (# == 0 || candidateVector[root][[#]] == 1) &];
+rootNodes[_, "Input", top_, _] := Union[{0, top}];
+rootNodes[root_, {lo_, hi_}, top_, _] :=
+  Join[If[lo == 0, {0}, {}],
+    Select[Range[1, $end[[top + 1]]], lo <= $depth[[# + 1]] - top <= hi && candidateVector[root][[#]] == 1 &]];
 
 (* query -> {Hold[lhs], Hold[rhs]}. A bare pattern is erased to r$ : p :> r$.
    A Rule's right-hand side was evaluated when the query was given, as in

@@ -6,6 +6,8 @@ status: accepted (superseded in part by ADR-0023 and ADR-0025)
 
 > **Amended by [ADR 0022](./0022-a-message-goes-on-the-symbol-the-mistake-is-in.md).** In `XMLCases`, `XMLFirstCase` and `XMLDeleteCases`, a misplaced `XMLDocument[]` now gives `XMLDocument::place` instead of `::badpat`. `XMLMatchQ` and the `Roles`/`Constructs` rules still give `::badpat`. Everything else stands.
 
+> **Amended for #74.** `XMLMatchQ` and `XMLFreeQ` take an `XMLDocument` pattern as the pattern root, not only a misplaced one to refuse, and test the document of every input as `XMLCases` finds it: the `XMLObject`, the list, or the virtual parent of a bare `XMLElement`. `XMLFreeQ` tests it at depth 0. On a bare element, `XMLMatchQ` tests the element against an element pattern and its document against an `XMLDocument` pattern. The `Roles`/`Constructs` rules still refuse `XMLDocument`, since they apply to elements.
+
 A query cannot say where an element sits relative to the input it was given. Four features wait on that: list stages that reach the root (ADR 0016 left `html:first-child` unmatched), CSS's `:root` and `:scope` (refused by ADR 0017), and a children-only search, bs4's `recursive=False` (set aside in #14). They are decided together here, so that no one of them settles it by accident. The design was settled in `.scratch/css-selectors/issues/07-decide-how-a-query-reaches-the-root-and-the-input.md`, and the implementation spec is `.scratch/css-selectors/specs/root-and-input.md`.
 
 ## Decision

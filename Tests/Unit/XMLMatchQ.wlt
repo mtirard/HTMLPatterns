@@ -131,27 +131,42 @@ TestCreate[
   TestID -> "xmlmatchq-xmlelement-pattern"
 ];
 
-(* An XMLDocument pattern tests a document; an element is not one. *)
+(* An XMLDocument pattern tests the document above the top elements: of a
+   document, of a list, and of a bare element (ADR 0018), as XMLCases finds
+   it (#74). *)
 TestCreate[
   {XMLMatchQ[nav, XMLDocument[{XMLPattern["nav"]}]], XMLMatchQ[nav, XMLDocument[{XMLPattern["a"]}]],
-    XMLMatchQ[nav[[2]], XMLDocument[{XMLPattern["nav"]}]], XMLMatchQ[nav[[2]], XMLDocument[]]},
-  {True, False, False, False},
+    XMLMatchQ[{" ", nav[[2]]}, XMLDocument[{XMLPattern["nav"]}]], XMLMatchQ[{" ", nav[[2]]}, XMLDocument[{XMLPattern["a"]}]],
+    XMLMatchQ[nav[[2]], XMLDocument[{XMLPattern["nav"]}]], XMLMatchQ[nav[[2]], XMLDocument[Child[XMLPattern["a"]]]],
+    XMLMatchQ[{nav[[2]]}, XMLDocument[]], XMLMatchQ[nav[[2]], XMLDocument[]], XMLMatchQ[{}, XMLDocument[]],
+    XMLMatchQ[XMLDocument[{XMLPattern["nav"]}]] /@ {nav, {nav[[2]]}, nav[[2]]}},
+  {True, False, True, False, True, False, True, True, True, {True, True, True}},
   TestID -> "xmlmatchq-document-pattern"
+];
+
+(* On a bare element, an element pattern still tests the element, and
+   alternatives may match either it or the document above it. *)
+TestCreate[
+  {XMLMatchQ[nav[[2]], XMLPattern["nav"][Child[XMLPattern["a"]]]], XMLMatchQ[nav[[2]], XMLPattern["a"][Child[XMLPattern["a"]]]],
+    XMLMatchQ[nav[[2]], XMLPattern["a"][Child[XMLPattern["a"]]] | XMLDocument[{XMLPattern["nav"]}]],
+    XMLMatchQ[nav[[2]], XMLPattern["nav"][Child[XMLPattern["a"]]] | XMLDocument[{XMLPattern["a"]}]]},
+  {True, False, True, True},
+  TestID -> "xmlmatchq-element-or-document-above-it"
 ];
 
 (* A kind mismatch is False: a document or a list against an element
    pattern. *)
 TestCreate[
   {XMLMatchQ[nav, XMLPattern["nav"]], XMLMatchQ[nav, XMLPattern[_][Descendant[XMLPattern["a"]]]],
-    XMLMatchQ[{el["a"]}, XMLPattern["a"]], XMLMatchQ[{el["a"]}, XMLDocument[{XMLPattern["a"]}]]},
-  {False, False, False, False},
+    XMLMatchQ[{el["a"]}, XMLPattern["a"]]},
+  {False, False, False},
   TestID -> "xmlmatchq-kind-mismatch"
 ];
 
 (* The same in the operator form, for each kind of pattern root. *)
 TestCreate[
   {XMLMatchQ[XMLPattern["nav"]] /@ {nav, {nav[[2]]}},
-    XMLMatchQ[XMLDocument[{XMLPattern["nav"]}]] /@ {nav[[2]], {nav[[2]]}},
+    XMLMatchQ[XMLDocument[{XMLPattern["a"]}]] /@ {nav[[2]], {nav[[2]]}},
     XMLMatchQ[{___}] /@ {nav[[2]], nav}},
   {{False, False}, {False, False}, {False, False}},
   TestID -> "xmlmatchq-operator-form-kind-mismatch"

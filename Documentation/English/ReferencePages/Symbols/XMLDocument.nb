@@ -21,7 +21,7 @@ Cell[TextData[{Cell[BoxData[ButtonBox["XMLDocument", BaseStyle -> "Link", Button
 
 Cell[TextData[{"The position of the document is ", Cell[BoxData[RowBox[{"{", "}"}]], "InlineFormula"], ". A name for the whole ", Cell[BoxData[ButtonBox["XMLDocument", BaseStyle -> "Link", ButtonData -> "paclet:MaximilienTirard/HTMLPatterns/ref/XMLDocument"]], "InlineFormula"], " pattern gives the tree for an ", Cell[BoxData[ButtonBox["XMLObject", BaseStyle -> "Link", ButtonData -> "paclet:ref/XMLObject"]], "InlineFormula"], " or a list, and ", Cell[BoxData[RowBox[{"{", StyleBox["e", "TI"], "}"}]], "InlineFormula"], " for a bare element ", Cell[BoxData[StyleBox["e", "TI"]], "InlineFormula"], "."}], "Notes"],
 
-Cell[TextData[{Cell[BoxData[RowBox[{ButtonBox["XMLMatchQ", BaseStyle -> "Link", ButtonData -> "paclet:MaximilienTirard/HTMLPatterns/ref/XMLMatchQ"], "[", RowBox[{StyleBox["tree", "TI"], ",", RowBox[{ButtonBox["XMLDocument", BaseStyle -> "Link", ButtonData -> "paclet:MaximilienTirard/HTMLPatterns/ref/XMLDocument"], "[", StyleBox["\[Ellipsis]", "TR"], "]"}]}], "]"}]], "InlineFormula"], " can give ", Cell[BoxData[ButtonBox["True", BaseStyle -> "Link", ButtonData -> "paclet:ref/True"]], "InlineFormula"], " only for an ", Cell[BoxData[ButtonBox["XMLObject", BaseStyle -> "Link", ButtonData -> "paclet:ref/XMLObject"]], "InlineFormula"], "."}], "Notes"],
+Cell[TextData[{Cell[BoxData[RowBox[{ButtonBox["XMLMatchQ", BaseStyle -> "Link", ButtonData -> "paclet:MaximilienTirard/HTMLPatterns/ref/XMLMatchQ"], "[", RowBox[{StyleBox["tree", "TI"], ",", RowBox[{ButtonBox["XMLDocument", BaseStyle -> "Link", ButtonData -> "paclet:MaximilienTirard/HTMLPatterns/ref/XMLDocument"], "[", StyleBox["\[Ellipsis]", "TR"], "]"}]}], "]"}]], "InlineFormula"], " tests the document of ", Cell[BoxData[StyleBox["tree", "TI"]], "InlineFormula"], ", an ", Cell[BoxData[ButtonBox["XMLObject", BaseStyle -> "Link", ButtonData -> "paclet:ref/XMLObject"]], "InlineFormula"], ", a list or a bare element, as ", Cell[BoxData[ButtonBox["XMLCases", BaseStyle -> "Link", ButtonData -> "paclet:MaximilienTirard/HTMLPatterns/ref/XMLCases"]], "InlineFormula"], " finds it."}], "Notes"],
 
 Cell[TextData[{Cell[BoxData[RowBox[{ButtonBox["XMLDocument", BaseStyle -> "Link", ButtonData -> "paclet:MaximilienTirard/HTMLPatterns/ref/XMLDocument"], "[", "]"}]], "InlineFormula"], " with no constraints matches any document."}], "Notes"]
 }, Open  ]],
@@ -219,16 +219,6 @@ Cell[CellGroupData[{Cell[BoxData[
  InterpretationBox[Cell[
   "Possible Issues", "ExampleSection"],
   $Line = 0; Null]], "ExampleSection"],
-
-Cell[CellGroupData[{Cell[BoxData[InterpretationBox[Cell["\t", "ExampleDelimiter"], $Line = 0; Null]], "ExampleDelimiter"], Cell[TextData[{Cell[BoxData[ButtonBox["XMLMatchQ", BaseStyle -> "Link", ButtonData -> "paclet:MaximilienTirard/HTMLPatterns/ref/XMLMatchQ"]], "InlineFormula"], " gives ", Cell[BoxData[ButtonBox["False", BaseStyle -> "Link", ButtonData -> "paclet:ref/False"]], "InlineFormula"], " for an element tested against an ", Cell[BoxData[ButtonBox["XMLDocument", BaseStyle -> "Link", ButtonData -> "paclet:MaximilienTirard/HTMLPatterns/ref/XMLDocument"]], "InlineFormula"], " pattern:"}], "ExampleText"], Cell[BoxData[RowBox[{"XMLMatchQ", "[", RowBox[{RowBox[{"XMLElement", "[", RowBox[{"\"p\"", ",", RowBox[{"{", "}"}], ",", RowBox[{"{", "\"Text\"", "}"}]}], "]"}], ",", RowBox[{"XMLDocument", "[", RowBox[{"{", RowBox[{"XMLPattern", "[", "\"p\"", "]"}], "}"}], "]"}]}], "]"}]], "Input"],
-
-Cell[BoxData["False"], "Output"],
-
-Cell["Test a list of elements against a list pattern instead:", "ExampleText"],
-
-Cell[BoxData[RowBox[{"XMLMatchQ", "[", RowBox[{RowBox[{"{", RowBox[{"XMLElement", "[", RowBox[{"\"p\"", ",", RowBox[{"{", "}"}], ",", RowBox[{"{", "\"Text\"", "}"}]}], "]"}], "}"}], ",", RowBox[{"{", RowBox[{"XMLPattern", "[", "\"p\"", "]"}], "}"}]}], "]"}]], "Input"],
-
-Cell[BoxData["True"], "Output"]}, Open]],
 
 Cell[CellGroupData[{Cell[BoxData[InterpretationBox[Cell["\t", "ExampleDelimiter"], $Line = 0; Null]], "ExampleDelimiter"], Cell["A bare element given as the tree is never a result, even as a top-level element:", "ExampleText"], Cell[BoxData[RowBox[{"XMLCases", "[", RowBox[{RowBox[{"XMLElement", "[", RowBox[{"\"p\"", ",", RowBox[{"{", "}"}], ",", RowBox[{"{", "\"Text\"", "}"}]}], "]"}], ",", RowBox[{RowBox[{"XMLDocument", "[", RowBox[{"{", RowBox[{"x", ":", RowBox[{"XMLPattern", "[", "\"p\"", "]"}]}], "}"}], "]"}], ":>", "x"}]}], "]"}]], "Input"],
 
