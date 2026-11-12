@@ -5,7 +5,7 @@
 
 ## Details and Options
 
-When ``pattern$`` matches, ``XMLExtract[tree$, XMLPosition[tree$, pattern$]]`` gives what ``XMLCases[tree$, pattern$]`` gives. When nothing matches, ``XMLPosition`` gives ``{}``, which ``XMLExtract`` reads as the position of the document.
+``XMLExtract[tree$, XMLPosition[tree$, pattern$]]`` gives what ``XMLCases[tree$, pattern$]`` gives, ``{}`` included when nothing matches.
 
 A position is a list of indices among element children, starting at the document at ``{}``. The root element of an ``XMLObject``, and an ``XMLElement`` given as the tree, are at ``{1}``; the ``i$``-th element of a list is at ``{i$}``.
 
@@ -23,7 +23,7 @@ A position for an element is a list of indices ``{i$1, i$2, $$}``. Other positio
 
 ``XMLExtract[tree$, upper$;;lower$]`` gives the list of the elements strictly between the element at ``upper$`` and the element at ``lower$``, outermost first. This is the value of a name on a ``Descendant`` constraint. ``upper$`` is ``{}`` or a position above ``lower$``.
 
-A list is read as several positions when every entry is a list or a path.
+A list is read as several positions when every entry is a list or a path. As in ``Extract``, ``{}`` is a list of no positions and gives ``{}``; the document is extracted in a list, as ``XMLExtract[tree$, {{}}]``.
 
 ``XMLExtract`` issues a message and returns ``$Failed`` when ``tree$`` has none of the forms that ``XMLCases`` accepts, when a position has none of the forms above, or when ``tree$`` has no part at a position.
 
@@ -77,7 +77,7 @@ Give the document, the root element and its tag:
 
 ```wl
 In[1]:= listing = XMLElement["ul", {"class" -> "a b"}, {XMLElement["li", {}, {"one"}], " ", XMLElement["li", {}, {XMLElement["a", {"href" -> "/x"}, {"two"}]}]}];
-{XMLExtract[{listing}, {}], XMLExtract[{listing}, {1, 0}]}
+XMLExtract[{listing}, {{}, {1, 0}}]
 
 Out[1]= {{XMLElement["ul", {"class" -> "a b"}, {XMLElement["li", {}, {"one"}], " ", XMLElement["li", {}, {XMLElement["a", {"href" -> "/x"}, {"two"}]}]}]}, "ul"}
 ```
@@ -248,19 +248,20 @@ Out[1]= {XMLElement["p", {}, {"1"}], XMLElement["p", {}, {"2"}], XMLElement["p",
 
 ---
 
-With no match, XMLPosition gives ``{}``, the position of the document:
+``{}`` is a list of no positions, so ``XMLExtract`` at the position of the document alone gives ``{}``:
 
 ```wl
 In[1]:= links = ImportString["<p><a href=\"/a\">A</a></p>", {"HTML", "XMLObject"}];
-XMLPosition[links, XMLPattern["table"]]
+positions = XMLPosition[links, XMLDocument[]];
+Map[XMLExtract[links, #] &, positions]
 
-Out[1]= {}
+Out[1]= {{}}
 ```
 
-``XMLExtract`` reads it as the document:
+Give the positions as a list instead:
 
 ```wl
-In[2]:= XMLExtract[links, {}] === links
+In[2]:= XMLExtract[links, positions] === {links}
 
 Out[2]= True
 ```

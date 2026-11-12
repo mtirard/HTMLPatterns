@@ -20,7 +20,7 @@ tail     := i | m ;; n | n ;; n-1
 - Indices count **element children only**, as the DOM's `children` does. **Text is not a position**, as in CSS; it is reached through its element.
 - `0` is the tag (part 0 is the head throughout WL). `Key` wraps attribute keys, so they never collide with structural steps; `Key["class"]` is the raw string and `Key["classList"]` its token list. `All` is the contents, text included. A run is a span; a gap is an empty span, `n ;; n-1`, the place before element child `n`.
 
-`XMLPosition[input, lhs :> rhs]` gives `rhs` with each counted name replaced by its position. `XMLExtract` mirrors `Extract`.
+`XMLPosition[input, lhs :> rhs]` gives `rhs` with each counted name replaced by its position. `XMLExtract` mirrors `Extract`, including its reading of `{}` as a list of no positions, not as the position of the document. `XMLPosition` gives `{}` when nothing matches, so `XMLExtract[input, XMLPosition[input, p]]` gives what `XMLCases[input, p]` gives in every case. The document is extracted in a list, `XMLExtract[input, {{}}]`.
 
 ## Considered options
 

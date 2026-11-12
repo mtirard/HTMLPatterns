@@ -9,7 +9,7 @@ A position is a list of indices among element children, starting at the document
 
 The position of the document is ``{}``. The root element of an ``XMLObject``, and an ``XMLElement`` given as the tree, are at ``{1}``. The ``i$``-th element of a list is at ``{i$}``.
 
-``XMLPosition[tree$, pattern$]`` gives the positions of the elements that ``pattern$`` matches, in document order. When nothing matches, it gives ``{}``, which ``XMLExtract`` reads as the position of the document.
+``XMLPosition[tree$, pattern$]`` gives the positions of the elements that ``pattern$`` matches, in document order. When nothing matches, it gives ``{}``, the empty list of positions.
 
 ``XMLPosition[tree$, pattern$ :> rhs$]`` gives one result for each result of ``XMLCases[tree$, pattern$ :> rhs$]``, in the same order, with each name that ``rhs$`` uses replaced by its position. Give ``rhs$`` as a name, or a list of names, to get the positions themselves.
 
@@ -303,25 +303,6 @@ In[1]:= links = ImportString["<p><a href=\"/a\">A</a><a href=\"/b\">B</a></p>", 
 XMLPosition[links, x : XMLPattern["a"] :> Length[x]]
 
 Out[1]= {4, 4}
-```
-
----
-
-With no match, ``XMLPosition`` gives ``{}``, which ``XMLExtract`` reads as the document:
-
-```wl
-In[1]:= links = ImportString["<p><a href=\"/a\">A</a></p>", {"HTML", "XMLObject"}];
-XMLExtract[links, XMLPosition[links, XMLPattern["table"]]] === links
-
-Out[1]= True
-```
-
-Check for no match before extracting:
-
-```wl
-In[2]:= With[{positions = XMLPosition[links, XMLPattern["table"]]}, If[positions === {}, {}, XMLExtract[links, positions]]]
-
-Out[2]= {}
 ```
 
 ---

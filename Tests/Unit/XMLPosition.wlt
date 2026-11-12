@@ -130,14 +130,31 @@ TestCreate[
 (* === XMLExtract === *)
 
 TestCreate[
-  {XMLExtract[listing, {}], XMLExtract[listing, {1}], XMLExtract[listing, {1, 0}],
+  {XMLExtract[listing, {1}], XMLExtract[listing, {1, 0}],
     XMLExtract[listing, {1, Key["class"]}], XMLExtract[listing, {1, Key["classList"], 2}],
     XMLExtract[listing, {1, 2}], XMLExtract[listing, {1, 2, 1, Key["href"]}],
     {XMLExtract[listing, {1, 2 ;; 1}]}, XMLExtract[listing, {1, All}],
     XMLExtract[listing, {{1, 0}, {1, Key["class"]}}]},
-  {listing, listing[[2]], "ul", "a b", "b", el["li", XMLElement["a", {"href" -> "/x"}, {}]], "/x",
+  {listing[[2]], "ul", "a b", "b", el["li", XMLElement["a", {"href" -> "/x"}, {}]], "/x",
     {}, {el["li"], " ", el["li", XMLElement["a", {"href" -> "/x"}, {}]]}, {"ul", "a b"}},
   TestID -> "extract-kinds"
+];
+
+(* {} is a list of no positions, as in Extract, so extracting at the
+   positions of a pattern that matches nothing gives what XMLCases gives. *)
+TestCreate[
+  {XMLExtract[listing, {}], XMLExtract[listing, XMLPosition[listing, XMLPattern["table"]]],
+    XMLCases[listing, XMLPattern["table"]]},
+  {{}, {}, {}},
+  TestID -> "extract-no-positions"
+];
+
+(* The document is extracted in a list of positions: an XMLObject, the list
+   {e} for a bare element e, and a list input itself. *)
+TestCreate[
+  {XMLExtract[listing, {{}}], XMLExtract[listing[[2]], {{}}], XMLExtract[{" ", el["a"], el["b"]}, {{}}]},
+  {{listing}, {{listing[[2]]}}, {{" ", el["a"], el["b"]}}},
+  TestID -> "extract-document"
 ];
 
 TestCreate[XMLExtract[listing, {1, 3}], $Failed, {XMLExtract::nopos}, TestID -> "extract-nopos"];
@@ -166,12 +183,11 @@ TestCreate[
    its own document, with text in its contents. Runs, gaps and the token
    tails after a list key. *)
 TestCreate[
-  {XMLExtract[listing[[2]], {}], XMLExtract[listing[[2]], {1}], XMLExtract[{" ", el["a"], el["b"]}, {}],
-    XMLExtract[{" ", el["a"], el["b"]}, {All}], {XMLExtract[{" ", el["a"], el["b"]}, {1 ;; 2}]},
+  {XMLExtract[listing[[2]], {1}], XMLExtract[{" ", el["a"], el["b"]}, {All}], {XMLExtract[{" ", el["a"], el["b"]}, {1 ;; 2}]},
     XMLExtract[{" ", el["a"], el["b"]}, {2, 0}], XMLExtract[listing, {1, Key["classList"]}],
     {XMLExtract[listing, {1, Key["classList"], 1 ;; 2}]}, {XMLExtract[listing, {1, Key["classList"], 3 ;; 2}]},
     XMLExtract[listing, {1, Key[All]}], XMLExtract[listing, {1, 1, Key["classList"]}]},
-  {{listing[[2]]}, listing[[2]], {" ", el["a"], el["b"]}, {" ", el["a"], el["b"]}, {el["a"], el["b"]},
+  {listing[[2]], {" ", el["a"], el["b"]}, {el["a"], el["b"]},
     "b", {"a", "b"}, {"a", "b"}, {}, {"class" -> "a b"}, {}},
   TestID -> "extract-documents-runs-and-tokens"
 ];
@@ -190,6 +206,14 @@ TestCreate[
   {$Failed, $Failed, $Failed},
   {XMLExtract::badtree, XMLPosition::badtree, XMLExtract::badmember},
   TestID -> "bad-tree"
+];
+
+(* The tree and the readings are checked even when there are no positions. *)
+TestCreate[
+  XMLExtract[listing, {}, "AttributeReadings" -> {"rel" -> <||>}],
+  $Failed,
+  {$AttributeReadings::notassoc},
+  TestID -> "extract-no-positions-checks-readings"
 ];
 
 TestCreate[

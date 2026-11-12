@@ -123,7 +123,7 @@ XMLPosition[tree_, q : Except[_?(optionRuleQ[XMLPosition])], opts : OptionsPatte
 XMLPosition[args___] /; (countMessage[XMLPosition, {args}, {2, 2}]; False) := Null;
 
 PackageExported[XMLExtract]
-XMLExtract::usage = "XMLExtract[tree, pos] gives the part of tree at position pos, as XMLPosition gives positions. XMLExtract[tree, {pos1, pos2, ...}] gives a list of the parts at each pos. A run m ;; n gives the element children m to n as a sequence, and a gap n ;; n-1 gives Sequence[]. A position upper ;; lower, as for a name on a Descendant constraint, gives the list of the elements strictly between upper and lower, outermost first. The \"AttributeReadings\" option adds entries to $AttributeReadings for one call.";
+XMLExtract::usage = "XMLExtract[tree, pos] gives the part of tree at position pos, as XMLPosition gives positions. XMLExtract[tree, {pos1, pos2, ...}] gives a list of the parts at each pos; as in Extract, {} is a list of no positions and gives {}, and the document is extracted as XMLExtract[tree, {{}}]. A run m ;; n gives the element children m to n as a sequence, and a gap n ;; n-1 gives Sequence[]. A position upper ;; lower, as for a name on a Descendant constraint, gives the list of the elements strictly between upper and lower, outermost first. The \"AttributeReadings\" option adds entries to $AttributeReadings for one call.";
 XMLExtract::pos = "`1` is not a position in an XML tree. A position is {} for the document or a list of element-child indices, optionally followed by 0, Key[All], Key[key] (then, for a list key, a token index, run or gap), All, or a run m ;; n or gap n ;; n-1 of element children; or upper ;; lower for the elements strictly between, where upper is {} or an element above the element lower.";
 XMLExtract::nopos = "There is no position `1` in the tree.";
 
@@ -143,9 +143,9 @@ Scan[Function[f, SyntaxInformation[f] = {"ArgumentsPattern" -> {_, _, OptionsPat
 (* XMLExtract                                                   *)
 (* =========================================================== *)
 
-(* A list whose entries are all positions is several positions; any other
-   list, {} included, is one. A path span is never a list, so the two cannot
-   be confused. *)
+(* A list whose entries are all positions is several positions, and {} is
+   none, as in Extract: the document is extracted as {{}}. Any other list is
+   one position. A path span is never a list, so the two cannot be confused. *)
 extracted[tree_, pos_] :=
   Which[
     !validTreeQ[tree], messageTreeRefusal[XMLExtract, tree]; $Failed,
@@ -156,7 +156,7 @@ extracted[tree_, pos_] :=
             If[positionsQ[pos], extractedAt[tree, readings, #] & /@ pos, extractedAt[tree, readings, pos]],
             $refusal]]]];
 
-positionsQ[l_] := MatchQ[l, {(_List | Span[_List, _List]) ..}];
+positionsQ[l_] := MatchQ[l, {(_List | Span[_List, _List]) ...}];
 
 (* The value at {} is the input, and {e} for a bare element e; its contents
    are its top elements, with the text between them for a list. *)
