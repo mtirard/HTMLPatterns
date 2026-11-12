@@ -656,8 +656,9 @@ TestCreate[
 
 TestCreate[
   {FromCSSSelector["a[x=\"y"] === FromCSSSelector["a[x=\"y\"]"], FromCSSSelector["a:not(.b"] === FromCSSSelector["a:not(.b)"],
-    FromCSSSelector["a[x"], FromCSSSelector["a:is(.b, .c"]},
-  {True, True, XMLPattern["a", "x"], XMLPattern["a", "classList" -> "b"] | XMLPattern["a", "classList" -> "c"]},
+    FromCSSSelector["a[x"], FromCSSSelector["a:is(.b, .c"],
+    FromCSSSelector["a:has(> b"] === FromCSSSelector["a:has(> b)"], FromCSSSelector[n : "a:nth-child(2"] === FromCSSSelector[n : "a:nth-child(2)"]},
+  {True, True, XMLPattern["a", "x"], XMLPattern["a", "classList" -> "b"] | XMLPattern["a", "classList" -> "c"], True, True},
   TestID -> "css-grammar-open-blocks-close-at-the-end"
 ];
 
