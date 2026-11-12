@@ -40,7 +40,7 @@ Options[XMLFirstCase] = {"AttributeReadings" -> <||>};
 XMLFirstCase[tree_, q_, default : Except[_?(optionRuleQ[XMLFirstCase])] : Missing["NotFound"],
     opts : OptionsPattern[]] :=
   withReadings[OptionValue["AttributeReadings"],
-    Replace[runQuery[compileQuery[XMLFirstCase, q], tree, "Values", 1], {{r_} :> Sequence @@ r, {} :> default}]];
+    Replace[runQuery[compileQuery[XMLFirstCase, q], tree, "Values", 1], {{{r_}} :> r, {{r___}} :> Sequence[r], {} :> default}]];
 
 XMLFirstCase[args___] /; (countMessage[XMLFirstCase, {args}, {2, 3}]; False) := Null;
 

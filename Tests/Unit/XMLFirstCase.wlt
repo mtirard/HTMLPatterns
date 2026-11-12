@@ -65,3 +65,28 @@ TestCreate[
   {5, 5},
   TestID -> "firstcase-rule-global-value-as-firstcase"
 ];
+
+(* The result is the value itself, not a Sequence of it: Rule and Set hold
+   a Sequence (SequenceHold), so a wrapper would show there. *)
+TestCreate[
+  "k" -> XMLFirstCase[XMLElement["div", {}, {XMLElement["b", {}, {"x"}]}],
+    b : XMLPattern["b"] :> HTMLTextContent[b]],
+  "k" -> "x",
+  TestID -> "firstcase-rule-no-sequence-wrapper"
+];
+
+(* A right-hand side that evaluates to a Sequence gives that Sequence, as in
+   FirstCase. *)
+TestCreate[
+  With[{t = XMLElement["div", {}, {XMLElement["b", {}, {"x"}]}]},
+    {"k" -> XMLFirstCase[t, XMLPattern["b"] :> Sequence[]],
+     "k" -> XMLFirstCase[t, XMLPattern["b"] :> Sequence[1, 2]]}],
+  {"k" -> FirstCase[{1}, 1 :> Sequence[]], "k" -> FirstCase[{1}, 1 :> Sequence[1, 2]]},
+  TestID -> "firstcase-sequence-rhs-as-firstcase"
+];
+
+TestCreate[
+  "k" -> XMLFirstCase[XMLElement["div", {}, {XMLElement["b", {}, {"x"}]}], XMLPattern["b"]],
+  "k" -> XMLElement["b", {}, {"x"}],
+  TestID -> "firstcase-pattern-no-sequence-wrapper"
+];
