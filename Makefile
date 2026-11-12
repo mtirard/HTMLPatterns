@@ -1,22 +1,9 @@
-.PHONY: test build publish install uninstall clean markdown install-hooks
+.PHONY: test build install uninstall clean markdown install-hooks
 
 PACLET_NAME = MaximilienTirard/HTMLPatterns
 
-# publish needs PUBLISH_DEST (an scp destination for the archive) and
-# PUBLISH_REBUILD_URL (fetched to rebuild the paclet site); set them in local.mk
--include local.mk
-
 build: clean
 	@wolframscript -code 'Needs["PacletTools`"]; r = PacletTools`PacletBuild["."]; If[FailureQ[r], Print["Build failed: ", r]; Exit[1]]; Print["Built ", FileNameTake[Last[r]["PacletArchive"]], " (", Round[QuantityMagnitude[Last[r]["TotalTime"], "Seconds"], 0.1], "s)"]; Exit[0]'
-
-publish: build
-	@test -n "$(PUBLISH_DEST)" -a -n "$(PUBLISH_REBUILD_URL)" || { echo "Set PUBLISH_DEST and PUBLISH_REBUILD_URL in local.mk"; exit 1; }
-	@archive=$$(ls build/*.paclet | head -1); \
-	echo "Uploading $$(basename $$archive) -> $(PUBLISH_DEST)/"; \
-	scp -q "$$archive" "$(PUBLISH_DEST)/" && \
-	echo "Triggering paclet site rebuild..." && \
-	curl -fsS -o /dev/null "$(PUBLISH_REBUILD_URL)" && \
-	echo "Published."
 
 install: build
 	@archive=$$(ls build/*.paclet | head -1); \
